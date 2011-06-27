@@ -2,10 +2,10 @@ module EasyOpen
   class Config
     class << self
       def defaults
-        save_dir = "#{ENV["HOME"]}/.easyopen_tmbundle#{ENV["TM_PROJECT_DIRECTORY"]}"
+        save_dir = "#{ENV["HOME"]}/.easyopen_tmbundle#{(ENV['TM_PROJECT_DIRECTORY'] || ENV['TM_DIRECTORY'] || '').sub(ENV['HOME'],'')}"
         
         @defaults ||= {
-          :project_dir        =>  ENV["TM_PROJECT_DIRECTORY"],
+          :project_dir        =>  ENV['TM_PROJECT_DIRECTORY'] || ENV['TM_DIRECTORY'],
           :current_word       =>  ENV['TM_CURRENT_WORD'],
           :save_dir           => save_dir,
           :def_index_file     => "#{save_dir}/def_index.dump",
