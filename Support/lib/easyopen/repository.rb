@@ -26,7 +26,7 @@ module EasyOpen
           }          
         rescue
           puts "not found call_stack file."
-          exit
+          exit 1
         end
       end
     end
@@ -41,17 +41,24 @@ module EasyOpen
         }
       end
       
-      def load
+      def load(path=nil)
+        path ||= Config[:def_index_file]
+        oldPath = nil
+        while not File.exists? path and path != oldPath do
+          oldPath = path
+          path = path.reverse().sub(%r!/[^/]+(?=/)!,'').reverse()
+        end
+        
         begin
           def_index = nil
-          open("#{Config[:def_index_file]}", "r") { |io|
+          open("#{path}", "r") { |io|
             def_index = Marshal.load(io)
           }
           return def_index
         rescue
           puts "not found def_index file. please create_def_index_file before open_def"
-          exit
-        end      
+          exit 1
+        end
       end
     end
   end
